@@ -7,6 +7,13 @@ html(lang="en")
         title SocketIO
         link(rel="stylesheet", href="https://unpkg.com/mvp.css")
     body
-         h1 It works!
-    script(src="/socket.io/socket.io.js") //Install socket Io on front end, 이와 같이 기본 브라우저에 내장되어 있는 websocket과 달리 설치 해 주어야 하기 때문에 websocket보다는 조금 무겁다.
+        header
+            h1 SocketIO
+        main
+            div#welcome
+                form
+                    input(placeholder="room name", required, type="text")
+                    button Enter Room
+    script(src="/socket.io/socket.io.js")
     script(src="/public/js/app.js")
+        //-Install socket Io on front end, 이와 같이 기본 브라우저에 내장되어 있는 websocket과 달리 설치 해 주어야 하기 때문에 websocket보다는 조금 무겁다.
