@@ -39,7 +39,16 @@ wsServer.on("connection", (socket) => {
         //     done("hello from the backend"); // argument를 fromt에 전달 할 수도 있다.
         // }, 10000);
     });
+    socket.on("disconnecting", ()=>{ //disconnecting : 고객이 접속을 중단할 것이지만 아직 방을 완전히 나가지는 않은 상태, disconnect : 연결이 완전히 끊어졌다는 것
+        socket.rooms.forEach(room => socket.to(room).emit("bye"));
+    })
+    socket.on("new_message", (msg, room, done) => {
+        socket.to(room).emit("new_message", msg);
+        done();
+    })
 });
 
 const handleListen = () => console.log(`Listening on http://localhost:3000`);
 httpServer.listen(3000, handleListen);
+
+
