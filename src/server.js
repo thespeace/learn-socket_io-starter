@@ -17,16 +17,27 @@ const wsServer = SocketIO(httpServer); //socket.io를 설치해주는 것 만으
 
 wsServer.on("connection", (socket) => {
     // console.log(socket); // **websocket이 아닌 socketIO의 socket**으로 connection 받을 준비 완료, 또한 서버가 다운되면 자동으로 재연결을 계속 시도한다.
+    socket.onAny((event)=>{
+        console.log(`Socket Event:${event}`); // onAny : Socket에 있는 모든 event를 확인 할 수 있다.
+    });
     socket.on("enter_room", (objectType,numberType,stringType,booleanType, roomName, done) => {
-        console.log(objectType);
-        console.log(numberType);
-        console.log(stringType);
-        console.log(booleanType);
-        console.log(roomName);
+        // console.log(objectType);
+        // console.log(numberType);
+        // console.log(stringType);
+        // console.log(booleanType);
+        // console.log(roomName);
 
-        setTimeout(()=> { //주로 처리 비용이 크고 시간이 오래 걸리는 작업을 백엔드서버에서 완료 후 프론트에 전달하는 용도로 많이 사용한다.
-            done("hello from the backend"); // argument를 fromt에 전달 할 수도 있다.
-        }, 10000);
+        // console.log(socket.id); //각 방(소켓)은 고유 방(소켓)의 id를 가지고 있다.
+        // console.log(socket.rooms); //기본적으로 user은 이미 방에 들어가 있다. 이를 확인하기 위해서 rooms을 확인하면 된다.
+        socket.join(roomName) // join만 해줌으로써 방(socket)에 참가할 수 있다.
+        // console.log(socket.rooms);
+
+        done();
+
+        socket.to(roomName).emit("welcome");// to emit : 자신을 제외한 모두(방에 있는)에게 메시지를 보낼 수 있다.
+        // setTimeout(()=> { //주로 처리 비용이 크고 시간이 오래 걸리는 작업을 백엔드서버에서 완료 후 프론트에 전달하는 용도로 많이 사용한다.
+        //     done("hello from the backend"); // argument를 fromt에 전달 할 수도 있다.
+        // }, 10000);
     });
 });
 

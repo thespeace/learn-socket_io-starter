@@ -17,3 +17,5 @@ npm i socket.io
 npm run dev
 ```
 위와 같이 세팅에 필요한 모듈들을 설치한 후, ``babel.config.json``,``nodemon.json``, ``src/server.js``,``src/public/js/app.js``, ``src/views/home.pug`` 들의 설정을 해주어야 합니다. 자세한 사항은 각 파일을 확인!
+
+## [공식홈페이지](https://socket.io/)
