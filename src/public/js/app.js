@@ -29,12 +29,18 @@ function addMessage(message){
 
 function handleMessageSubmit(event){
     event.preventDefault();
-    const input = room.querySelector("input");
+    const input = room.querySelector("#msg input");
     const value = input.value;
     socket.emit("new_message", input.value, roomName, () => {
         addMessage(`You : ${value}`);
     });
     input.value = "";
+}
+
+function handleNicknameSubmit(event){
+    event.preventDefault();
+    const input = room.querySelector("#name input");
+    socket.emit("nickname", input.value);
 }
 
 function showRoom(){
@@ -43,8 +49,10 @@ function showRoom(){
     const h3 = room.querySelector("h3");
     h3.innerText = `Room : ${roomName}`
 
-    const form = room.querySelector("form");
-    form.addEventListener("submit", handleMessageSubmit);
+    const msgForm = room.querySelector("#msg");
+    msgForm.addEventListener("submit", handleMessageSubmit);
+    const nameForm = room.querySelector("#name");
+    nameForm.addEventListener("submit", handleNicknameSubmit);
 }
 
 function handleRoomSubmit(event){
@@ -67,12 +75,12 @@ function handleRoomSubmit(event){
 
 form.addEventListener("submit", handleRoomSubmit);
 
-socket.on("welcome", () => {
-    addMessage("Someone joined! 😀");
+socket.on("welcome", (user) => {
+    addMessage(`${user} arrived! 😀`);
 })// on : 백엔드 서버에서 emit한 함수를 프론트에서 받을 수 있다.
 
-socket.on("bye", () => {
-    addMessage("Someone left.. 😥");
+socket.on("bye", (left) => {
+    addMessage(`${left} left.. 😥`);
 })
 
 socket.on("new_message", addMessage); // === (msg) => { addMessage(msg) };
