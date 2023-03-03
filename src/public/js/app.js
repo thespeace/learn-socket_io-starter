@@ -12,6 +12,14 @@ const socket = io();
     간단하게 방에 참가하거나 떠나는 것을 구현 가능하다. 또한 방에 메시지를 보내는 것 등등 다양한 기능 구현을 간단하게 할 수 있다.
 */
 
+/*
+    Adapter?
+    현재 우리는 서버의 memory에서 im memory Adapter을 사용하고 있다. 만약 서버 3개를 생성한다면, 3개의 memory가 생기지만 서로 메시지를 주고 받거나 하는 둥 공유는 불가능하다.
+    이러한 공유를 가능하게 해주는 것이, 해결방법이 바로 Adapter을 사용하는 것이다. 즉, 다른 서버들간의 실시간 어플리케이션을 동기화해주는 역할을 한다.
+    규모가 큰 어플리케이션에서는 원활한 connection을 위해 많은 서버를 가지게 될 것이다. 그리고 3:10
+        ex) MongoDB Adapter : MongoDB를 사용해서 서버간의 통신을 해준다.
+
+*/
 const welcome = document.getElementById("welcome");
 const form = welcome.querySelector("form");
 const room = document.getElementById("room");
