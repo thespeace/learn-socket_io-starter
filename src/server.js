@@ -71,15 +71,21 @@ wsServer.on("connection", (socket) => {
 
         done();
 
-        socket.to(roomName).emit("welcome" , socket.nickname);// to emit : 자신을 제외한 모두(방에 있는)에게 메시지를 보낼 수 있다.
+        socket.to(roomName).emit("welcome" , socket.nickname);// to emit : 자신을 제외한 방에 있는 모두에게 메시지를 보낼 수 있다.
+        wsServer.sockets.emit("room_change", publicRooms());// 모든 소켓에 방 생성 메시지 보내기.
+
+
         // setTimeout(()=> { //주로 처리 비용이 크고 시간이 오래 걸리는 작업을 백엔드서버에서 완료 후 프론트에 전달하는 용도로 많이 사용한다.
         //     done("hello from the backend"); // argument를 fromt에 전달 할 수도 있다.
         // }, 10000);
     });
-    socket.on("disconnecting", ()=>{ //disconnecting : 고객이 접속을 중단할 것이지만 아직 방을 완전히 나가지는 않은 상태, disconnect : 연결이 완전히 끊어졌다는 것
+    socket.on("disconnecting", ()=>{ //disconnecting : 고객이 접속을 중단할 것이지만 아직 방을 완전히 나가지는 않은 상태.
         socket.rooms.forEach((room) =>
             socket.to(room).emit("bye", socket.nickname)
         );
+    });
+    socket.on("disconnect", ()=>{ //disconnect : 연결이 완전히 끊어졌다는 것
+        wsServer.sockets.emit("room_change", publicRooms());
     });
     socket.on("new_message", (msg, room, done) => {
         socket.to(room).emit("new_message", `${socket.nickname} : ${msg}`);
