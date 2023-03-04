@@ -46,6 +46,11 @@ function publicRooms(){
     return publicRooms;
 }
 
+function countRoom(roomName){
+    return wsServer.sockets.adapter.rooms.get(roomName)?.size;
+
+}
+
 wsServer.on("connection", (socket) => {
     // console.log(socket); // **websocket이 아닌 socketIO의 socket**으로 connection 받을 준비 완료, 또한 서버가 다운되면 자동으로 재연결을 계속 시도한다.
     // wsServer.socketsJoin("announcement") //모든 socket을 공지(announcement)방에 들어가게 만들어서 공지사항을 보낼 수도 있다.
@@ -71,7 +76,7 @@ wsServer.on("connection", (socket) => {
 
         done();
 
-        socket.to(roomName).emit("welcome" , socket.nickname);// to emit : 자신을 제외한 방에 있는 모두에게 메시지를 보낼 수 있다.
+        socket.to(roomName).emit("welcome" , socket.nickname, countRoom(roomName));// to emit : 자신을 제외한 방에 있는 모두에게 메시지를 보낼 수 있다.
         wsServer.sockets.emit("room_change", publicRooms());// 모든 소켓에 방 생성 메시지 보내기.
 
 
@@ -81,7 +86,7 @@ wsServer.on("connection", (socket) => {
     });
     socket.on("disconnecting", ()=>{ //disconnecting : 고객이 접속을 중단할 것이지만 아직 방을 완전히 나가지는 않은 상태.
         socket.rooms.forEach((room) =>
-            socket.to(room).emit("bye", socket.nickname)
+            socket.to(room).emit("bye", socket.nickname,  countRoom(room) -1)
         );
     });
     socket.on("disconnect", ()=>{ //disconnect : 연결이 완전히 끊어졌다는 것
