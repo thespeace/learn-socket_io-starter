@@ -1,5 +1,5 @@
 import http from "http";
-import { Server } from "socket.io";
+import { Server } from "socket.io"; //server 생성 방식 변경
 import { instrument } from "@socket.io/admin-ui";
 import express from "express";
 
@@ -30,11 +30,15 @@ const httpServer = http.createServer(app);
                                        //그 이유는 socketIO는 websocket의 부가기능이 아니기 때문에,  websocket을 사용할 수 없을때 이것들을 사용해 도와준다.(재연결 같은 기능들..)
                                        // go to ==> "home.pug"
 
-const wsServer = new Server(httpServer, {
+const wsServer = new Server(httpServer, { //온라인 데모가 작동할 수 있게끔, 환경설정.
     cors: {
         origin: ["https://admin.socket.io"],
         credentials: true
     }
+});
+
+instrument(wsServer, {
+    auth: false
 });
 
 function publicRooms(){

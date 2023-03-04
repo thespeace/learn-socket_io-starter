@@ -22,7 +22,8 @@ npm run dev
 
 ---
 
-## Admin Panel
+## Admin Panel ([해당 사이트](https://socket.io/docs/v4/admin-ui/))
+
 
 ##### Socket IO는 서버를 확인 할 수 있는 Admin UI를 기본적으로 제공해준다.
 ##### 모든 Room들과 클라이언트도 확인 할 수 있다.
