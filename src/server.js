@@ -1,5 +1,6 @@
 import http from "http";
-import SocketIO from "socket.io";
+import { Server } from "socket.io";
+import { instrument } from "@socket.io/admin-ui";
 import express from "express";
 
 /*
@@ -25,9 +26,16 @@ app.get("/",(req, res) => res.render("home"));
 app.get("/*",(req, res) => res.redirect("/"));
 
 const httpServer = http.createServer(app);
-const wsServer = SocketIO(httpServer); //socket.io를 설치해주는 것 만으로 url/socket.io/socket.io.js를 제공해준다.
+// const wsServer = SocketIO(httpServer); //socket.io를 설치해주는 것 만으로 url/socket.io/socket.io.js를 제공해준다.
                                        //그 이유는 socketIO는 websocket의 부가기능이 아니기 때문에,  websocket을 사용할 수 없을때 이것들을 사용해 도와준다.(재연결 같은 기능들..)
                                        // go to ==> "home.pug"
+
+const wsServer = new Server(httpServer, {
+    cors: {
+        origin: ["https://admin.socket.io"],
+        credentials: true
+    }
+});
 
 function publicRooms(){
     const {
